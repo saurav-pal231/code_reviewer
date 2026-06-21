@@ -6,24 +6,25 @@ import { redirect } from "next/navigation";
 import {DEFAULT_AUTH_CALLBACK, SIGN_IN_PATH, getSafeCallbackPath} from "../utils/index"
 
 
-export async function signInWithGithub(formData:FormData) {
+export async function signInWithGithub(formData: FormData) {
     const callback = formData.get("callbackUrl");
+  
+  
     const redirectTo = getSafeCallbackPath(
-        typeof callback === "string" ? callback : null
+      typeof callback === "string" ? callback : null
     );
-    // FIX CALLBACK LATER
     const result = await auth.api.signInSocial({
-        body:{
-            provider:"github",
-            callbackURL:redirectTo,
-        },
-        headers:await headers(),
-
+      body: {
+        provider: "github",
+        callbackURL: redirectTo
+      },
+      headers: await headers(),
     });
-    if(result.url) {
-        redirect(result.url);
+  
+    if (result.url) {
+      redirect(result.url);
     }
-}
+  }
 
 export async function getServerSession() {
     return auth.api.getSession({
